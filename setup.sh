@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Claude Code Starter Kit — Setup Script
-# Copies template files to ~/.claude/ and personalizes them.
+# Checks/installs dependencies, copies template files to ~/.claude/, personalizes them.
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 CLAUDE_DIR="$HOME/.claude"
@@ -10,12 +10,145 @@ CLAUDE_DIR="$HOME/.claude"
 echo "=== Claude Code Starter Kit ==="
 echo ""
 
-# Check prerequisites
-command -v claude >/dev/null 2>&1 || { echo "Error: claude CLI not found. Install it first: https://docs.anthropic.com/en/docs/claude-code"; exit 1; }
-command -v python3 >/dev/null 2>&1 || { echo "Error: python3 not found"; exit 1; }
-command -v git >/dev/null 2>&1 || { echo "Error: git not found"; exit 1; }
+# -----------------------------------------------
+# Step 1: Detect OS and package manager
+# -----------------------------------------------
 
-# Check if ~/.claude already exists with config
+OS="unknown"
+PKG_INSTALL=""
+
+if [[ "$(uname)" == "Darwin" ]]; then
+    OS="macos"
+    if command -v brew >/dev/null 2>&1; then
+        PKG_INSTALL="brew install"
+    fi
+elif [[ "$(uname)" == "Linux" ]]; then
+    OS="linux"
+    if command -v apt-get >/dev/null 2>&1; then
+        PKG_INSTALL="sudo apt-get install -y"
+    elif command -v dnf >/dev/null 2>&1; then
+        PKG_INSTALL="sudo dnf install -y"
+    elif command -v pacman >/dev/null 2>&1; then
+        PKG_INSTALL="sudo pacman -S --noconfirm"
+    fi
+fi
+
+echo "Detected: $OS"
+echo ""
+
+install_with_prompt() {
+    local name="$1"
+    local pkg="${2:-$1}"
+    local install_cmd="${3:-}"
+
+    if [[ -z "$install_cmd" && -z "$PKG_INSTALL" ]]; then
+        echo "  ✗ $name — not found. Install it manually and re-run setup."
+        return 1
+    fi
+
+    local cmd="${install_cmd:-$PKG_INSTALL $pkg}"
+    read -p "  Install $name? ($cmd) [Y/n] " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Nn]$ ]]; then
+        eval "$cmd"
+        return $?
+    else
+        echo "  Skipped $name."
+        return 1
+    fi
+}
+
+# -----------------------------------------------
+# Step 2: Check and install dependencies
+# -----------------------------------------------
+
+echo "Checking dependencies..."
+echo ""
+MISSING=0
+
+# --- Homebrew (macOS only) ---
+if [[ "$OS" == "macos" ]] && ! command -v brew >/dev/null 2>&1; then
+    echo "  ✗ Homebrew — not found (needed to install other tools on macOS)"
+    read -p "  Install Homebrew? [Y/n] " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Nn]$ ]]; then
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        # Add to PATH for this session
+        if [[ -f /opt/homebrew/bin/brew ]]; then
+            eval "$(/opt/homebrew/bin/brew shellenv)"
+        fi
+        PKG_INSTALL="brew install"
+    else
+        echo "  Without Homebrew, you'll need to install dependencies manually."
+    fi
+fi
+
+# --- Git ---
+if command -v git >/dev/null 2>&1; then
+    echo "  ✓ git ($(git --version | head -c 20))"
+else
+    echo "  ✗ git — not found"
+    install_with_prompt "git" || MISSING=1
+fi
+
+# --- Python 3 ---
+if command -v python3 >/dev/null 2>&1; then
+    PY_VER=$(python3 --version 2>&1)
+    echo "  ✓ python3 ($PY_VER)"
+else
+    echo "  ✗ python3 — not found (needed for security guard and task database)"
+    install_with_prompt "python3" "python3" || MISSING=1
+fi
+
+# --- jq ---
+if command -v jq >/dev/null 2>&1; then
+    echo "  ✓ jq ($(jq --version 2>&1))"
+else
+    echo "  ✗ jq — not found (needed for statusline and hooks)"
+    install_with_prompt "jq" || MISSING=1
+fi
+
+# --- trash (safe rm replacement) ---
+if command -v trash >/dev/null 2>&1; then
+    echo "  ✓ trash"
+elif [[ "$OS" == "macos" ]]; then
+    echo "  ✗ trash — not found (safe alternative to rm -rf, moves to Trash)"
+    install_with_prompt "trash" "trash" || true
+elif [[ "$OS" == "linux" ]]; then
+    echo "  ✗ trash-cli — not found (safe alternative to rm -rf)"
+    install_with_prompt "trash-cli" "trash-cli" || true
+fi
+
+# --- Claude Code CLI ---
+if command -v claude >/dev/null 2>&1; then
+    echo "  ✓ claude CLI"
+else
+    echo "  ✗ Claude Code CLI — not found"
+    if command -v npm >/dev/null 2>&1; then
+        install_with_prompt "claude" "" "npm install -g @anthropic-ai/claude-code" || MISSING=1
+    elif command -v brew >/dev/null 2>&1; then
+        install_with_prompt "claude" "" "brew install claude-code" || MISSING=1
+    else
+        echo "    Install Node.js first, then: npm install -g @anthropic-ai/claude-code"
+        echo "    Or see: https://docs.anthropic.com/en/docs/claude-code"
+        MISSING=1
+    fi
+fi
+
+echo ""
+
+if [[ $MISSING -eq 1 ]]; then
+    echo "Some required tools are missing. Install them and re-run ./setup.sh"
+    exit 1
+fi
+
+echo "All dependencies OK."
+echo ""
+
+# -----------------------------------------------
+# Step 3: Check for existing config
+# -----------------------------------------------
+
 if [[ -f "$CLAUDE_DIR/settings.json" ]]; then
     echo "Warning: ~/.claude/settings.json already exists."
     read -p "Overwrite? This will replace your current config. (y/N) " -n 1 -r
@@ -23,7 +156,10 @@ if [[ -f "$CLAUDE_DIR/settings.json" ]]; then
     [[ $REPLY =~ ^[Yy]$ ]] || { echo "Aborted."; exit 0; }
 fi
 
-# Collect user info
+# -----------------------------------------------
+# Step 4: Personalize
+# -----------------------------------------------
+
 echo "Let's personalize your assistant."
 echo ""
 read -p "Your first name: " USER_NAME
@@ -36,6 +172,10 @@ fi
 
 echo ""
 echo "Setting up ~/.claude/ ..."
+
+# -----------------------------------------------
+# Step 5: Copy files
+# -----------------------------------------------
 
 # Create directory structure
 mkdir -p "$CLAUDE_DIR"/{rules,scripts,knowledge/sessions,knowledge/self,knowledge/user,knowledge/problems,skills/onboard,skills/tasks,state}
@@ -74,7 +214,10 @@ sed -e "s/{{USER_NAME}}/$USER_NAME/g" \
 # --- Initialize task database ---
 python3 "$CLAUDE_DIR/scripts/db.py" init
 
-# --- Initialize git repo if not already one ---
+# -----------------------------------------------
+# Step 6: Initialize git repo
+# -----------------------------------------------
+
 if [[ ! -d "$CLAUDE_DIR/.git" ]]; then
     cd "$CLAUDE_DIR"
     git init
@@ -86,6 +229,10 @@ if [[ ! -d "$CLAUDE_DIR/.git" ]]; then
     echo "  cd ~/.claude && git remote add origin git@github.com:YOUR_USERNAME/claude-config.git && git push -u origin main"
 fi
 
+# -----------------------------------------------
+# Done
+# -----------------------------------------------
+
 echo ""
 echo "=== Setup complete ==="
 echo ""
@@ -93,7 +240,7 @@ echo "Files installed:"
 echo "  ~/.claude/CLAUDE.md          — global instructions"
 echo "  ~/.claude/settings.json      — hooks + security"
 echo "  ~/.claude/rules/             — session, workflow, handoff, task rules"
-echo "  ~/.claude/scripts/           — security guard, pre-compact, reminders"
+echo "  ~/.claude/scripts/           — security guard, pre-compact, reminders, db"
 echo "  ~/.claude/skills/onboard/    — guided first-session setup"
 echo "  ~/.claude/skills/tasks/      — task management (/tasks)"
 echo "  ~/.claude/tasks.db           — SQLite task store"
