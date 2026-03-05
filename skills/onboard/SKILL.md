@@ -127,18 +127,55 @@ Write `knowledge/user/goals.md` with:
 
 ## Step 4: Initial Tasks (5 min)
 
-**Goal:** Populate MEMORY.md with active tasks and next steps
+**Goal:** Populate the task database and MEMORY.md with initial tasks.
 
-Ask:
+First, insert the goals into the database:
+
+```bash
+# Insert end goal
+python3 -c "
+import sys; sys.path.insert(0,'$HOME/.claude/scripts')
+from db import add_goal
+add_goal('G0', '[END_GOAL_NAME]', 'end_goal', description='[END_GOAL_DESCRIPTION]')
+"
+
+# Insert each subgoal
+python3 -c "
+import sys; sys.path.insert(0,'$HOME/.claude/scripts')
+from db import add_goal
+add_goal('S1', '[NAME]', 'subgoal', parent_id='G0', done_when='[CRITERIA]', problems='[1,2]', order_num=1)
+"
+```
+
+Then ask:
 
 > What are the 3-5 most important things you need to do this week? What's blocking you or what are you procrastinating on?
 
 For each task:
 - Connect it to a subgoal (flag if it doesn't connect to any)
+- Connect it to problems (flag if zero — "Is this drift?")
 - Assign priority: P1 (today/tomorrow), P2 (this week), P3 (this month)
 - Estimate size: S (< 1 session), M (2-3 sessions), L (4+ sessions)
 
-Update MEMORY.md with an Active Tasks table.
+Insert each task into the database:
+
+```bash
+python3 -c "
+import sys; sys.path.insert(0,'$HOME/.claude/scripts')
+from db import next_task_id, add_task
+tid = next_task_id()
+add_task(tid, '[TASK_NAME]', 'P1', problems='1,4', effort='S', subgoal='S1')
+print(f'Created {tid}')
+"
+```
+
+After all tasks are inserted, export to markdown:
+
+```bash
+python3 ~/.claude/scripts/db.py export
+```
+
+Update MEMORY.md with an Active Tasks table showing the top tasks.
 
 ---
 
@@ -192,10 +229,13 @@ Adapt the tone to match the user's communication style observed in Steps 1-4.
    > - Your 12 problems: knowledge/problems/
    > - Your goals: knowledge/user/goals.md
    > - AI identity: knowledge/self/identity.md
-   > - [N] initial tasks in MEMORY.md
+   > - [N] tasks in the database (view with `/tasks`)
+   > - Task backlog: state/backlog.md
    >
    > From now on, every session starts by reading these files. I'll remember who you are,
    > what you're working toward, and what to do next.
+   >
+   > Use `/tasks` to manage your backlog — add tasks, review priorities, mark things done.
 
 4. **Create session note** in `knowledge/sessions/YYYY-MM-DD-onboarding.md`
 
