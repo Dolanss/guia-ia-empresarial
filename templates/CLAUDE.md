@@ -30,7 +30,7 @@ Goals: `knowledge/user/goals.md`
 ## Knowledge System
 
 - Knowledge files live in `~/.claude/knowledge/` — read on demand, don't preload all at once
-- Session notes go in `knowledge/sessions/` — every session gets a note
+- Session notes go in `state/sessions/` — every session gets a note
 - MEMORY.md is the cross-session index — keep it under 200 lines, use it as an index not a document
 - Each fact lives in ONE place, referenced from others — no duplication
 - YAML frontmatter on every knowledge file (tags, date, type)

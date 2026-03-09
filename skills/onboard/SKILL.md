@@ -286,7 +286,7 @@ Adapt the tone to match the user's communication style observed in Steps 1-4.
    >
    > Use `/tasks` to manage your backlog — add tasks, review priorities, mark things done.
 
-6. **Create session note** in `knowledge/sessions/YYYY-MM-DD-onboarding.md`
+6. **Create session note** in `state/sessions/YYYY-MM-DD-onboarding.md`
 
 ---
 

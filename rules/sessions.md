@@ -8,7 +8,7 @@ Do ALL of these before `/clear`, `/compact`, session exit, or when context is ge
 4. **Commit and push** `~/.claude` repo if knowledge files changed
 
 ## Session Notes
-Location: `knowledge/sessions/YYYY-MM-DD-<slug>.md`
+Location: `state/sessions/YYYY-MM-DD-<slug>.md`
 
 ```yaml
 ---

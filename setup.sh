@@ -178,7 +178,7 @@ echo "Setting up ~/.claude/ ..."
 # -----------------------------------------------
 
 # Create directory structure
-mkdir -p "$CLAUDE_DIR"/{rules,scripts,knowledge/sessions,knowledge/self,knowledge/user,knowledge/problems,skills/onboard,skills/tasks,state}
+mkdir -p "$CLAUDE_DIR"/{rules,scripts,knowledge/self,knowledge/user,knowledge/problems,skills/onboard,skills/tasks,state/sessions}
 
 # --- Copy scripts ---
 cp "$SCRIPT_DIR/scripts/global-guard.py" "$CLAUDE_DIR/scripts/"
