@@ -2,33 +2,23 @@
 
 Código gerado por IA não vai para produção sem revisão. Ponto. Este guia ensina o que verificar e como fazer essa revisão de forma eficiente.
 
-O fluxo padrão deve ser:
+## O fluxo padrão deve ser:
 
-Revisão do código utilizando o checklist acima
+Envio para validação com o QA (Eu) - Promoção para produção apenas após validação
 
-Teste manual da funcionalidade implementada
+## A etapa de QA é obrigatória para garantir que:
 
-Envio para validação em QA
+- O comportamento da funcionalidade está correto
+- Não há regressões em funcionalidades existentes
+- Casos de erro foram tratados adequadamente
+- Não existem riscos de segurança ou exposição de dados
+- Mesmo alterações consideradas pequenas devem seguir esse fluxo.
 
-Promoção para produção apenas após validação
+## Resumo do processo:
 
-A etapa de QA é obrigatória para garantir que:
+## Revisão → Teste → QA → Produção
 
-O comportamento da funcionalidade está correto
-
-Não há regressões em funcionalidades existentes
-
-Casos de erro foram tratados adequadamente
-
-Não existem riscos de segurança ou exposição de dados
-
-Mesmo alterações consideradas pequenas devem seguir esse fluxo.
-
-Resumo do processo:
-
-Revisão → Teste → QA → Produção
-
-Caso haja necessidade excepcional de pular etapas, a decisão deve ser registrada e justificada.
+Caso haja necessidade excepcional de pular etapas, a decisão deve ser ***registrada e justificada.***
 
 ## Red flags — pare tudo se ver isso
 
