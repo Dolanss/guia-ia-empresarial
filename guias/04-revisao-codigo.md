@@ -2,102 +2,33 @@
 
 Código gerado por IA não vai para produção sem revisão. Ponto. Este guia ensina o que verificar e como fazer essa revisão de forma eficiente.
 
-## Por que revisar é obrigatório
+O fluxo padrão deve ser:
 
-A IA:
-- Não sabe o contexto de segurança do seu sistema
-- Não sabe quais dados são sensíveis
-- Gera código que parece correto mas pode ter falhas sutis
-- Não testa o que gera
-- Pode copiar padrões desatualizados ou inseguros
+Revisão do código utilizando o checklist acima
 
-**Você é responsável pelo código que sobe.** "A IA gerou" não é justificativa quando algo quebra em produção.
+Teste manual da funcionalidade implementada
 
-## O checklist de revisão
+Envio para validação em QA
 
-Use esse checklist antes de qualquer commit de código gerado por IA:
+Promoção para produção apenas após validação
 
-### Segurança (não pule isso)
+A etapa de QA é obrigatória para garantir que:
 
-- [ ] Nenhuma credencial, chave de API ou senha hardcoded no código
-- [ ] Dados do usuário são validados antes de usar (forms, inputs, query params)
-- [ ] Chamadas de API têm autenticação quando necessário
-- [ ] No Supabase: RLS (Row Level Security) está ativado nas tabelas com dados de usuário
-- [ ] Nenhuma query SQL que possa retornar dados de outros usuários
-- [ ] Erros não expõem informações internas do sistema para o usuário final
+O comportamento da funcionalidade está correto
 
-### Funcionalidade
+Não há regressões em funcionalidades existentes
 
-- [ ] O código faz o que foi pedido? (teste manualmente)
-- [ ] Os casos de erro estão tratados? (o que acontece se a API cair? Se o usuário não tiver permissão?)
-- [ ] Estados de carregamento existem onde necessário?
-- [ ] O comportamento em mobile está aceitável?
+Casos de erro foram tratados adequadamente
 
-### Qualidade
+Não existem riscos de segurança ou exposição de dados
 
-- [ ] O código está legível? Você consegue entender o que cada parte faz?
-- [ ] Não tem código morto (funções criadas mas não usadas)?
-- [ ] Os nomes de variáveis e funções fazem sentido?
-- [ ] Não tem `console.log` de debug esquecido?
+Mesmo alterações consideradas pequenas devem seguir esse fluxo.
 
-### Dependências
+Resumo do processo:
 
-- [ ] Alguma nova biblioteca foi adicionada? Se sim, você sabe para que serve?
-- [ ] As versões das dependências estão pinadas (sem `^` para pacotes críticos em produção)?
+Revisão → Teste → QA → Produção
 
-## Como fazer a revisão na prática
-
-### Passo 1: Leia o diff completo
-
-Não olhe só para o resultado final. Olhe o que mudou.
-
-```bash
-git diff
-```
-
-Leia cada arquivo modificado. Para cada mudança, pergunte: "Faz sentido? É isso que eu pedi?"
-
-### Passo 2: Teste os casos de erro, não só o caminho feliz
-
-A maioria dos bugs está nos casos de erro. Teste:
-- O que acontece com input inválido?
-- O que acontece se a rede cair no meio da operação?
-- O que acontece se o usuário não tiver permissão?
-- O que acontece com campos em branco?
-
-### Passo 3: Peça ao Lovable/Claude para revisar o próprio código
-
-Isso funciona surpreendentemente bem:
-
-```
-Revise esse código que você gerou com foco em:
-1. Vulnerabilidades de segurança
-2. Casos de erro não tratados
-3. Dados de usuário que poderiam ser expostos
-
-[cole o código]
-```
-
-Use a resposta como ponto de partida — não como aprovação final.
-
-### Passo 4: Verifique o Supabase (se aplicável)
-
-Se o projeto usa Supabase, verifique no dashboard:
-- **Authentication:** As políticas de acesso estão corretas?
-- **Table Editor:** RLS está ativado em todas as tabelas com dados de usuário?
-- **API:** Alguma tabela está exposta sem proteção?
-
-## Revisão rápida vs. revisão completa
-
-**Revisão rápida** (para mudanças pequenas, sem risco de segurança):
-- Leia o diff
-- Teste manualmente a mudança
-- Verifique os itens de segurança relevantes
-
-**Revisão completa** (para features novas, mudanças em autenticação, qualquer coisa que vai para produção pela primeira vez):
-- Todo o checklist acima
-- Teste em ambiente separado antes de produção
-- Um segundo par de olhos se possível
+Caso haja necessidade excepcional de pular etapas, a decisão deve ser registrada e justificada.
 
 ## Red flags — pare tudo se ver isso
 
