@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.1] - 2026-03-13
+
+### Fixed
+
+- **macOS `/tmp` symlink bug** — `global-guard.py` now resolves `/tmp`, `/var/tmp`, `/usr/local`, `/opt/homebrew` at load time. On macOS these are symlinks to `/private/...`; previously, resolved paths didn't match the unresolved roots, blocking all `/tmp` operations.
+- **`setup.sh` name validation** — now requires at least 2 characters (previously accepted empty-ish single-char input)
+- **`setup.sh` git staging** — replaced `git add -A` with explicit file list to avoid accidentally committing pre-existing files in `~/.claude/`
+- **`state/backlog.md` committed on setup** — DB export now runs before git init, so the backlog file is included in the initial commit
+- **Starter `MEMORY.md`** — setup now creates a minimal MEMORY.md with placeholder sections and file map. Previously, users who skipped `/onboard` had no MEMORY.md despite CLAUDE.md referencing it.
+
+### Files
+
+- Modified: `scripts/global-guard.py`, `setup.sh`, `CHANGELOG.md`
+
 ## [1.1.0] - 2026-03-13
 
 ### Added
@@ -51,5 +65,6 @@ First stable release.
 - 5 scripts: global-guard.py, db.py, extract-learnings.py, pre-compact.sh, session-save-reminder.sh
 - 3 templates: CLAUDE.md, settings.json, gitignore
 
+[1.1.1]: https://github.com/mp-web3/claude-starter-kit/releases/tag/v1.1.1
 [1.1.0]: https://github.com/mp-web3/claude-starter-kit/releases/tag/v1.1.0
 [1.0.0]: https://github.com/mp-web3/claude-starter-kit/releases/tag/v1.0.0

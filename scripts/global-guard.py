@@ -19,8 +19,8 @@ HOME_DIR = str(Path.home())
 
 SECRETS_RE = re.compile(r"\.(env|key|pem|secret|keystore)$|\.env\.", re.IGNORECASE)
 
-WRITABLE_ROOTS = [HOME_DIR, "/tmp", "/var/tmp"]
-READABLE_ROOTS = WRITABLE_ROOTS + ["/usr/local", "/opt/homebrew"]
+WRITABLE_ROOTS = [HOME_DIR, str(Path("/tmp").resolve()), str(Path("/var/tmp").resolve())]
+READABLE_ROOTS = WRITABLE_ROOTS + [str(Path("/usr/local").resolve()), str(Path("/opt/homebrew").resolve())]
 
 PASSTHROUGH_TOOLS = {
     "WebSearch", "WebFetch", "AskUserQuestion",

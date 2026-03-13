@@ -165,8 +165,8 @@ echo ""
 read -p "Your first name: " USER_NAME
 read -p "One-line bio (e.g., 'Python dev, building SaaS tools'): " USER_BIO
 
-if [[ -z "$USER_NAME" ]]; then
-    echo "Error: name is required"
+if [[ -z "$USER_NAME" || ${#USER_NAME} -lt 2 ]]; then
+    echo "Error: name is required (at least 2 characters)"
     exit 1
 fi
 
@@ -221,8 +221,35 @@ sed -e "s/{{USER_NAME}}/$USER_NAME/g" \
     -e "s|{{USER_BIO}}|$USER_BIO|g" \
     "$SCRIPT_DIR/templates/CLAUDE.md" > "$CLAUDE_DIR/CLAUDE.md"
 
-# --- Initialize task database ---
+# --- Initialize task database and export backlog ---
 python3 "$CLAUDE_DIR/scripts/db.py" init
+python3 "$CLAUDE_DIR/scripts/db.py" export
+
+# --- Create starter MEMORY.md ---
+cat > "$CLAUDE_DIR/MEMORY.md" << 'MEMEOF'
+# Auto-Memory
+
+## Active Tasks
+
+(Run `/tasks` or `/onboard` to populate)
+
+## Active Projects
+
+(Will grow as you work on projects)
+
+## Next Up
+
+1. Run `/onboard` to set up your profile, problems, goals, and tasks
+
+## File Map
+
+| Path | Content |
+|---|---|
+| `knowledge/user/profile.md` | Your profile (created by /onboard) |
+| `knowledge/user/goals.md` | Goals and subgoals (created by /onboard) |
+| `knowledge/problems/00-overview.md` | 12 problems overview (created by /onboard) |
+| `knowledge/self/identity.md` | AI self-knowledge (created by /onboard) |
+MEMEOF
 
 # -----------------------------------------------
 # Step 6: Initialize git repo
@@ -231,7 +258,10 @@ python3 "$CLAUDE_DIR/scripts/db.py" init
 if [[ ! -d "$CLAUDE_DIR/.git" ]]; then
     cd "$CLAUDE_DIR"
     git init
-    git add -A
+    git add \
+        CLAUDE.md MEMORY.md settings.json statusline.sh .gitignore \
+        rules/ agents/ scripts/ skills/ state/backlog.md \
+        knowledge/
     git commit -m "initial setup from claude-starter-kit"
     echo ""
     echo "Git repo initialized at ~/.claude/"
@@ -248,6 +278,7 @@ echo "=== Setup complete ==="
 echo ""
 echo "Files installed:"
 echo "  ~/.claude/CLAUDE.md          — global instructions"
+echo "  ~/.claude/MEMORY.md          — cross-session index (first 200 lines auto-loaded)"
 echo "  ~/.claude/settings.json      — hooks + security"
 echo "  ~/.claude/rules/             — session, workflow, handoff, task, delegation, development rules"
 echo "  ~/.claude/agents/            — code-reviewer, bug-fixer, implementer, researcher"
