@@ -10,7 +10,7 @@ Situações reais onde IA agrega valor, com o nível de cuidado necessário para
 |---------|-------------|
 | 🟢 | Baixo risco — use livremente, revise brevemente |
 | 🟡 | Risco médio — revise com atenção antes de usar |
-| 🔴 | Alto risco — revisão obrigatória, não vá para produção sem validar |
+| 🔴 | Alto risco — revisão obrigatória, não vá para produção sem validação do QA |
 
 ---
 
@@ -138,14 +138,13 @@ Framework de testes: Vitest. Arquivo de testes em src/utils/precos.test.ts.
 
 **Como usar:** Use com contexto extremamente detalhado sobre seu modelo de segurança. Inclua quais usuários podem fazer o quê, como as permissões são estruturadas, quais dados são sensíveis.
 
-**Nível de revisão:**
+**Nível de revisão (responsabilidade do QA):**
 - Leia **todo** o código gerado
 - Teste tentativas de acesso não autorizado (acesse com usuário B o que pertence ao usuário A)
 - Verifique RLS no Supabase se aplicável
 - Confirme que tokens/sessões expiram corretamente
-- Um segundo par de olhos se possível
 
-Não vá para produção sem revisão completa.
+Não vá para produção sem validação completa do QA.
 
 ---
 

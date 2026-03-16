@@ -64,12 +64,11 @@ Após o projeto inicial gerado, **não peça tudo de uma vez**. Trabalhe feature
    de pagamento e cria o painel de admin"
 ```
 
-### 4. Teste cada passo antes do próximo
+### 4. Envie para o QA validar antes do próximo passo
 
 Antes de pedir qualquer mudança nova:
-- Abra o preview
-- Teste o que foi gerado
-- Anote o que está errado com precisão
+- Envie o que foi gerado para o QA testar e validar
+- Aguarde o feedback com os pontos que precisam de ajuste
 - Só então faça o próximo pedido
 
 Pular essa etapa é a causa número um de projetos Lovable que viram espaguete.
@@ -128,7 +127,7 @@ Você pede uma mudança, funciona. Pede outra, ainda funciona. Pede mais uma... 
 
 Você pede, funciona, você sobe. Três semanas depois algo quebra e ninguém sabe por quê porque ninguém leu o código.
 
-**Solução:** Antes de qualquer deploy, leia o código gerado. Pelo menos as partes críticas (autenticação, manipulação de dados, chamadas de API). Se não consegue ler, peça ao Lovable: "Explique o que esse código faz e quais são os pontos de atenção."
+**Solução:** Antes de qualquer deploy, envie o código gerado para o QA revisar. Pelo menos as partes críticas (autenticação, manipulação de dados, chamadas de API). Se não consegue ler, peça ao Lovable: "Explique o que esse código faz e quais são os pontos de atenção."
 
 ---
 
@@ -150,7 +149,7 @@ O Lovable não tem senso de escopo de produto. Ele vai adicionar tudo que você 
 
 ---
 
-### Armadilha 5: Usar em produção sem revisão
+### Armadilha 5: Usar em produção sem validação do QA
 
 O Lovable gera código funcional na maior parte do tempo. Mas ele pode gerar:
 - Queries SQL que expõem dados de outros usuários (falta de RLS no Supabase)

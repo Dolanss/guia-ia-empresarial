@@ -40,7 +40,7 @@ Isso inclui:
 
 ---
 
-### 3. Nunca use código gerado sem ler
+### 3. Nunca use código gerado sem validação do QA
 
 Especialmente para código que:
 - Lida com autenticação e autorização
@@ -52,9 +52,9 @@ Especialmente para código que:
 
 ---
 
-### 4. Nunca suba para produção sem testar
+### 4. Nunca suba para produção sem o QA testar
 
-"Funcionou no preview" não é teste. Teste em ambiente separado (staging/homologação) antes.
+"Funcionou no preview" não é teste. O QA deve testar em ambiente separado (staging/homologação) antes.
 
 ---
 

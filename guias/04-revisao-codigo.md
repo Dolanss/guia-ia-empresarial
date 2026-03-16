@@ -33,8 +33,8 @@ Caso haja necessidade excepcional de pular etapas, a decisão deve ser ***regist
 
 ## A regra dos dois olhos
 
-Código que vai para produção deve ser lido por pelo menos uma pessoa que não o gerou. Isso vale para código humano, vale para código de IA.
+Código que vai para produção deve ser validado pelo QA. Isso vale para código humano, vale para código de IA.
 
-Se você é a única pessoa que vai ler, pelo menos dê um intervalo de alguns minutos entre gerar e revisar — distância temporal ajuda a pegar erros óbvios.
+O QA é responsável por garantir a qualidade antes da promoção para produção — nenhuma exceção.
 
 Próximo: [Segurança e o que nunca fazer →](05-seguranca.md)

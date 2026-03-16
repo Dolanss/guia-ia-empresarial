@@ -76,11 +76,11 @@ Refatora esse código para:
 - O botão funciona no desktop mas não no mobile
 - Funciona com email, não funciona com Google OAuth
 
-**O que fazer em vez disso:** Antes de qualquer deploy:
-1. Teste com dados reais (não só o happy path)
-2. Teste casos de erro (o que acontece se a rede cair? Se o campo estiver vazio?)
-3. Verifique no Supabase se os dados chegaram corretamente
-4. Teste em mobile
+**O que fazer em vez disso:** Antes de qualquer deploy, envie para o QA validar:
+1. Testar com dados reais (não só o happy path)
+2. Testar casos de erro (o que acontece se a rede cair? Se o campo estiver vazio?)
+3. Verificar no Supabase se os dados chegaram corretamente
+4. Testar em mobile
 
 ---
 
@@ -129,7 +129,7 @@ Eles ignoram porque "não parece afetar nada".
 - Uma variável chamada `password` aparece no código com um valor de exemplo
 - A IA adicionou uma dependência nova sem avisar
 
-**O que fazer em vez disso:** Leia o código antes de commitar. Sempre. Não precisa entender cada linha, mas precisa escanear por coisas suspeitas.
+**O que fazer em vez disso:** Envie o código para o QA revisar antes de commitar. Sempre. O QA vai escanear por coisas suspeitas e validar antes da promoção.
 
 ---
 

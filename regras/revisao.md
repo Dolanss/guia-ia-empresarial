@@ -4,7 +4,7 @@ Define o processo mínimo antes de qualquer código gerado por IA ir para produ�
 
 ## Regra base
 
-**Nenhum código gerado por IA vai para produção sem ter sido lido por um humano.**
+**Nenhum código gerado por IA vai para produção sem ter sido validado pelo QA.**
 
 Isso não é sugestão. Isso é política de trabalho.
 
@@ -12,7 +12,7 @@ Isso não é sugestão. Isso é política de trabalho.
 
 ### 1. Leia o diff completo
 
-Antes de qualquer commit, leia cada linha que vai ser adicionada ou modificada.
+Antes de qualquer commit, envie para o QA revisar cada linha que vai ser adicionada ou modificada.
 
 ```bash
 git diff
@@ -50,15 +50,14 @@ Para qualquer feature que envolva:
 
 O processo é:
 1. Gerar com IA
-2. Revisar completamente (não só escanear)
-3. Testar em ambiente de desenvolvimento
-4. Fazer peer review (outra pessoa lê)
-5. Testar em staging se disponível
-6. Deploy com monitoramento ativo nas primeiras horas
+2. Enviar para o QA revisar completamente (não só escanear)
+3. QA testa em ambiente de desenvolvimento
+4. QA testa em staging se disponível
+5. Deploy com monitoramento ativo nas primeiras horas
 
 ## O que não é aceitável
 
 - "Funcionou no preview então está pronto"
-- Commit direto sem ler o código
+- Commit direto sem validação do QA
 - "A IA gerou, se tiver bug a gente vê depois"
 - Skip de testes "porque é rápido"

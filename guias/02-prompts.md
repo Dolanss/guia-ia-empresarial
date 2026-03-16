@@ -57,7 +57,7 @@ Pedir múltiplas coisas gera resultado mediano em tudo.
 
 **Ruim:** "Cria o formulário, conecta com a API, adiciona validação e testa tudo"
 
-**Bom:** Pedir cada parte separadamente, validar uma antes de partir para a próxima.
+**Bom:** Pedir cada parte separadamente, enviar para o QA validar antes de partir para a próxima.
 
 ---
 

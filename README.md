@@ -15,7 +15,7 @@ IA generativa não é mágica — é uma ferramenta. Como qualquer ferramenta, e
 | 1 | [`guias/01-fundamentos.md`](guias/01-fundamentos.md) | Como a IA funciona e por que seu prompt importa |
 | 2 | [`guias/02-prompts.md`](guias/02-prompts.md) | Como escrever instruções que funcionam |
 | 3 | [`guias/03-lovable.md`](guias/03-lovable.md) | Guia específico do Lovable: fluxo, armadilhas, dicas |
-| 4 | [`guias/04-revisao-codigo.md`](guias/04-revisao-codigo.md) | Como revisar e validar o código gerado |
+| 4 | [`guias/04-revisao-codigo.md`](guias/04-revisao-codigo.md) | Processo de validação do código gerado pelo QA |
 | 5 | [`guias/05-seguranca.md`](guias/05-seguranca.md) | O que nunca fazer: segredos, dados sensíveis, permissões |
 
 ### Templates (copie e use)

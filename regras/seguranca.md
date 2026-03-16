@@ -15,7 +15,7 @@ Estas regras se aplicam a todo uso de IA na empresa. Não são sugestões.
 - Qualquer dado coberto pela LGPD de usuários reais
 
 ### Nunca faça:
-- Deploy de código gerado por IA sem revisão
+- Deploy de código gerado por IA sem validação do QA
 - Commit de código com credenciais hardcoded (mesmo que pareça teste)
 - Dar permissões de admin para ferramentas de IA quando não necessário
 - Usar dados reais de produção para testar features com IA
@@ -48,8 +48,8 @@ Se encontrar algo suspeito, investigue antes de continuar.
 Para qualquer projeto com Supabase que vai para produção:
 
 1. Acesse o painel do Supabase → Authentication → Policies
-2. Para cada tabela com dados de usuário, confirme que há uma política de leitura que limita ao próprio usuário
-3. Teste com dois usuários diferentes: usuário B não pode ver dados do usuário A
+2. Para cada tabela com dados de usuário, o QA deve confirmar que há uma política de leitura que limita ao próprio usuário
+3. O QA deve testar com dois usuários diferentes: usuário B não pode ver dados do usuário A
 
 ## Incidente de segurança
 

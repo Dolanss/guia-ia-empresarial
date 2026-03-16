@@ -59,7 +59,7 @@ Revisão precisa: "X está errado porque Y. Corrija apenas X."
     ↓
 Resultado melhor
     ↓
-Teste e validação humana
+Envio para validação pelo QA
 ```
 
 ## Contexto é o insumo mais importante
@@ -83,7 +83,7 @@ A IA inventa coisas com confiança. Isso se chama alucinação. Ela vai:
 - Gerar código que parece certo mas não funciona
 - Afirmar fatos incorretos com certeza
 
-**Nunca assuma que o output está correto sem verificar.** Código gerado por IA precisa ser lido, testado e validado — não só colado e commitado.
+**Nunca assuma que o output está correto sem verificar.** Código gerado por IA precisa ser enviado para o QA validar — não só colado e commitado.
 
 ## A analogia certa
 
@@ -92,7 +92,7 @@ Pense na IA como um **estagiário muito rápido com memória de ouro, mas sem ju
 - Ele executa qualquer instrução sem questionar se faz sentido
 - Ele não sabe o que não foi dito
 - Ele produz código que parece profissional mas pode ter falhas escondidas
-- Você precisa revisar o trabalho dele antes de subir para produção
+- O QA precisa revisar e validar o trabalho dele antes de subir para produção
 - Ele fica melhor conforme você dá mais contexto e feedback preciso
 
 Próximo: [Como escrever prompts que funcionam →](02-prompts.md)
